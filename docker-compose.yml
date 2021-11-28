@@ -1,0 +1,57 @@
+version: '3.9'
+services:
+  nginx:
+    restart: always
+    build:
+      context: ./docker/nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./app:/var/www
+    depends_on:
+      - front
+
+  front:
+    image: node:17.1
+    restart: always
+    entrypoint: ["yarn", "dev"]
+    volumes:
+      - ./app/front:/var/www/front
+    working_dir: /var/www/front
+
+  php:
+    restart: always
+    build:
+      context: ./docker/php
+    volumes:
+      - ./app/api:/var/www/api
+    working_dir: /var/www/api
+
+  worker-api:
+    restart: always
+    build:
+      context: ./docker/php
+    entrypoint: ["php", "bin/console", "messenger:consume", "mailing", "--limit=100", "--time-limit=3600"]
+    volumes:
+      - ./app/api:/var/www/api
+    working_dir: /var/www/api
+
+  mailhog:
+    restart: always
+    build:
+      context: ./docker/mailhog
+    ports:
+      - "8025:8025"
+
+  mongodb:
+    image: mongo:5.0.4
+    restart: always
+    environment:
+      MONGO_DATA_DIR: /data/db
+      MONGODB_DATABASE: mongodb
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27000:27000"
+    volumes:
+      - ./db/mongodb:/data/db
