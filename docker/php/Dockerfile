@@ -1,4 +1,4 @@
-FROM php:8.1-rc-fpm
+FROM php:8.1-fpm
 
 RUN apt update && apt install -y zlib1g-dev libpng-dev libexpat1-dev libicu-dev libfreetype6-dev libjpeg-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
