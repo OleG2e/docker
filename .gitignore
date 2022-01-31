@@ -4,3 +4,5 @@
 /app/front
 /app/api
 /db
+.env
+data
