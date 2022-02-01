@@ -26,15 +26,15 @@ services:
     volumes:
       - ./app/api:/var/www/api
     working_dir: /var/www/api
-
-  worker-api:
-    restart: always
-    build:
-      context: ./docker/php
-    entrypoint: ["php", "bin/console", "messenger:consume", "mailing", "--limit=100", "--time-limit=3600"]
-    volumes:
-      - ./app/api:/var/www/api
-    working_dir: /var/www/api
+#
+#  worker-api:
+#    restart: always
+#    build:
+#      context: ./docker/php
+#    entrypoint: ["php", "bin/console", "messenger:consume", "mailing", "--limit=100", "--time-limit=3600"]
+#    volumes:
+#      - ./app/api:/var/www/api
+#    working_dir: /var/www/api
 
   mailhog:
     restart: always
@@ -44,7 +44,8 @@ services:
       - "8025:8025"
 
   db:
-    image: postgres:14-alpine
+    image: postgres:14.1-alpine
+    restart: always
     ports:
       - "5432:5432"
     environment:
