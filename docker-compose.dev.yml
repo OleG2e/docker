@@ -9,10 +9,11 @@ services:
     volumes:
       - ./app:/var/www
     depends_on:
+      - php
       - front
 
   front:
-    image: node:16.13.0
+    image: node:16.14.0
     restart: always
     entrypoint: ["yarn", "dev"]
     volumes:
@@ -23,17 +24,15 @@ services:
     restart: always
     build:
       context: ./docker/php
-    volumes:
-      - ./app/api:/var/www/api
     working_dir: /var/www/api
 #
 #  worker-api:
 #    restart: always
 #    build:
 #      context: ./docker/php
-#    entrypoint: ["php", "bin/console", "messenger:consume", "mailing", "--limit=100", "--time-limit=3600"]
+#    entrypoint: [ "bin/console", "messenger:consume", "mailing", "--limit=100", "--time-limit=3600" ]
 #    volumes:
-#      - ./app/api:/var/www/api
+#      - ./app/api:/var/www/api:z
 #    working_dir: /var/www/api
 
   mailhog:
