@@ -24,6 +24,8 @@ services:
     restart: always
     build:
       context: ./docker/php
+    volumes:
+      - ./app/api:/var/www/api:z
     working_dir: /var/www/api
 #
 #  worker-api:
